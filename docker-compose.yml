@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: frontend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`kahuna90.mooo.com`)"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: backend
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`kahuna90.mooo.com`) && PathPrefix(`/api`)"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+      - "traefik.http.middlewares.backend-strip-prefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.docs.rule=Host(`kahuna90.mooo.com`) && PathPrefix(`/docs`)"
+      - "traefik.http.services.docs.loadbalancer.server.port=8000"
+
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Ewayinka4.
+      POSTGRES_DB: hng
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  adminer:
+    image: adminer
+    container_name: adminer
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.adminer.rule=Host(`db.kahuna90.mooo.com`)"
+      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
+    ports:
+      - "8080:8080"
+
+  traefik:
+    image: traefik:v2.2
+    container_name: traefik
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8090:8080" # Proxy Manager Port
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "./traefik/traefik.yml:/traefik.yml"
+
+volumes:
+  postgres_data:
