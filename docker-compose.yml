@@ -5,6 +5,8 @@ services:
     build:
       context: ./frontend
     container_name: frontend
+    ports:
+      - "80:80"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.frontend.rule=Host(`kahuna90.mooo.com`)"
@@ -14,6 +16,10 @@ services:
     build:
       context: ./backend
     container_name: backend
+    environment:
+      - DATABASE_URL=postgresql://postgres:Ewayinka4.@postgres/hng
+    ports:
+      - "8000:8000"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.backend.rule=Host(`kahuna90.mooo.com`) && PathPrefix(`/api`)"
@@ -49,8 +55,10 @@ services:
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
     ports:
       - "80:80"
+      - "443:443"
       - "8090:8080" # Proxy Manager Port
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
