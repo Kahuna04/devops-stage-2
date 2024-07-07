@@ -5,60 +5,51 @@ services:
     build:
       context: ./frontend
     container_name: frontend
-    ports:
-      - "3000:3000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`kahuna90.mooo.com`)"
-      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
 
   backend:
     build:
       context: ./backend
     container_name: backend
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.backend.rule=Host(`kahuna90.mooo.com`) && PathPrefix(`/api`)"
-      - "traefik.http.services.backend.loadbalancer.server.port=8000"
-      - "traefik.http.middlewares.backend-strip-prefix.stripprefix.prefixes=/api"
-      - "traefik.http.routers.docs.rule=Host(`kahuna90.mooo.com`) && PathPrefix(`/docs`)"
-      - "traefik.http.services.docs.loadbalancer.server.port=8000"
 
   postgres:
     image: postgres:13
     container_name: postgres
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Ewayinka4.
-      POSTGRES_DB: hng
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: app_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
     container_name: adminer
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.adminer.rule=Host(`db.kahuna90.mooo.com`)"
-      - "traefik.http.services.adminer.loadbalancer.server.port=8080"
     ports:
       - "8080:8080"
 
-  traefik:
-    image: traefik:v2.2
-    container_name: traefik
-    command:
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
     ports:
       - "80:80"
-      - "443:443"
-      - "8090:8080" # Proxy Manager Port
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock"
-      - "./traefik/traefik.yml:/traefik.yml"
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - frontend
+      - backend
+      - adminer
+      - proxy_manager
+
+  proxy_manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: proxy_manager
+    ports:
+      - "8090:81" # Adjusting port to match default NPM port
+    environment:
+      DB_SQLITE_FILE: "/data/database.sqlite"
+    volumes:
+      - ./data:/data
 
 volumes:
   postgres_data:
+  data:
