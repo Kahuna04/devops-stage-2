@@ -3,5 +3,6 @@ uvicorn[standard]
 sentry-sdk
 pydantic
 sqlalchemy
+sqlmodel
 databases[postgresql]
 psycopg2-binary
