@@ -7,3 +7,4 @@ sqlmodel
 databases[postgresql]
 psycopg2-binary
 jwt
+PyJWT==v2.8.0
