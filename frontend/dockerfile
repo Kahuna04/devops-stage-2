@@ -1,7 +1,7 @@
 # frontend/Dockerfile
 FROM node:14-slim AS build
 
-WORKDIR /src
+WORKDIR /app
 
 COPY package.json ./
 RUN npm install
