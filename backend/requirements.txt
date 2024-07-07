@@ -1,6 +1,6 @@
 fastapi
 uvicorn[standard]
-sentry_sdk
+sentry-sdk
 pydantic
 sqlalchemy
 databases[postgresql]
