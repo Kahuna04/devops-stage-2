@@ -6,3 +6,4 @@ sqlalchemy
 sqlmodel
 databases[postgresql]
 psycopg2-binary
+jwt
