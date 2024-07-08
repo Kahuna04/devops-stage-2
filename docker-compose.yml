@@ -15,7 +15,7 @@ services:
   frontend:
     build:
       context: ./frontend
-    container_name: nodejs_app
+    container_name: frontend
     ports:
       - "5173:5173"
     env_file:
@@ -39,7 +39,7 @@ services:
 
   proxy:
     image: jc21/nginx-proxy-manager:latest
-    container_name: nginx_proxy_manager
+    container_name: proxy
     ports:
       - "80:80"
       - "443:443"
