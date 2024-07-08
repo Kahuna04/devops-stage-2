@@ -43,7 +43,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "81:81"
+      - "8090:81"
     environment:
       DB_SQLITE_FILE: "/data/database.sqlite"
     volumes:
