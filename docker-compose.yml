@@ -6,7 +6,9 @@ services:
       context: ./frontend
     container_name: frontend
     ports: 
-      - "80:5173"
+      - "5173:5173"
+    env_file:
+      - ./frontend/.env
 
   backend:
     build:
@@ -14,16 +16,16 @@ services:
     container_name: backend
     ports: 
       - "8000:8000"
+    env_file:
+      - ./backend/.env
 
   postgres:
     image: postgres:13
     container_name: postgres
     ports: 
       - "5432:5432"
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Ewayinka4.
-      POSTGRES_DB: hng
+   env_file:
+      - ./backend/.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
