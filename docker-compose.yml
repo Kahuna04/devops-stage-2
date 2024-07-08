@@ -12,6 +12,8 @@ services:
     build:
       context: ./backend
     container_name: backend
+     environment:
+      - DATABASE_URL=postgresql://postgres:Ewayinka4.@kahuna90.mooo.com:5432/hng
     ports: 
       - "8000:8000"
 
