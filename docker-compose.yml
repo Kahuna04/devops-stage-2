@@ -17,7 +17,7 @@ services:
       context: ./frontend
     container_name: nodejs_app
     ports:
-      - "80:5173"
+      - "5173:5173"
     env_file:
       - ./frontend/.env
 
