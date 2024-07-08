@@ -11,6 +11,6 @@ WORKDIR /app
 # Copy and install dependencies
 COPY . /app
 RUN poetry install
-EXPOSE 8002
+EXPOSE 8000
 # Start the application
 CMD ["bash", "-c", "poetry run bash ./prestart.sh && poetry run uvicorn app.main:app --reload --host 0.0.0.0"]
