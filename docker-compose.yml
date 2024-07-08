@@ -50,7 +50,7 @@ services:
       - ./data:/data
       - ./letsencrypt:/etc/letsencrypt
     depends_on:
-      - db
+      - postgres
       - backend
       - frontend
       - adminer
