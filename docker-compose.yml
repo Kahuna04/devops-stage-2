@@ -21,8 +21,8 @@ services:
     ports: 
       - "5432:5432"
     environment:
-      POSTGRES_USER: kahuna
-      POSTGRES_PASSWORD: Ewayinka4
+      POSTGRES_USER: localhost
+      POSTGRES_PASSWORD: Ewayinka4.
       POSTGRES_DB: hng
     volumes:
       - postgres_data:/var/lib/postgresql/data
